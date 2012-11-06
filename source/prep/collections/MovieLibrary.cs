@@ -37,7 +37,21 @@ namespace prep.collections
 
     public IEnumerable<Movie> search_movies_by_criteria(Condition<Movie> condition)
     {
-      return movies.all_items_matching(condition.Invoke);
+      return movies.all_items_matching(new Match<Movie>(condition));
+    }
+
+    public class Match<Item> : IMatchAn<Item>
+    {
+      private Condition<Item> _condition;
+ 
+      public Match(Condition<Item> condition)
+      {
+        _condition = condition;
+      }
+      public bool matches(Item item)
+      {
+        return _condition(item);
+      }
     }
 
     public IEnumerable<Movie> all_movies_published_by_pixar()
